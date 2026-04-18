@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    >
+    <meta name="theme-color" content="#f7fbff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Flow Log</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Private on this phone</p>
+          <h1>Flow Log</h1>
+        </div>
+        <div class="topbar-side">
+          <p class="topbar-label">Selected day</p>
+          <p class="date-pill" id="selected-date-pill" aria-live="polite"></p>
+        </div>
+      </header>
+
+      <section class="quick-log-section" aria-labelledby="quick-log-heading">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Quick log</p>
+            <h2 id="quick-log-heading">Tap once and keep moving</h2>
+          </div>
+        </div>
+        <div class="quick-actions" aria-label="Quick logging">
+          <button class="action-button water-button" id="water-button" type="button">
+            <span class="action-emoji" aria-hidden="true">💧</span>
+            <span class="action-title">Water</span>
+            <span class="action-subtitle">Log now</span>
+          </button>
+          <button class="action-button pee-button" id="pee-button" type="button">
+            <span class="action-emoji" aria-hidden="true">🚽</span>
+            <span class="action-title">Pee</span>
+            <span class="action-subtitle">Log now</span>
+          </button>
+          <button class="action-button number-two-button" id="number-two-button" type="button">
+            <span class="action-emoji" aria-hidden="true">💩</span>
+            <span class="action-title">#2</span>
+            <span class="action-subtitle">Log now</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="utility-section" aria-labelledby="utility-heading">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Phone setup</p>
+            <h2 id="utility-heading">Install and back up</h2>
+          </div>
+        </div>
+        <div class="utility-grid">
+          <article class="utility-card">
+            <p class="utility-title">Install on iPhone</p>
+            <p class="utility-copy">
+              Open this in Safari, tap Share, then choose Add to Home Screen.
+            </p>
+          </article>
+          <article class="utility-card">
+            <p class="utility-title">Backup your logs</p>
+            <div class="backup-actions">
+              <button class="pill-button" id="export-button" type="button">
+                Export backup
+              </button>
+              <button class="pill-button" id="import-button" type="button">
+                Import backup
+              </button>
+              <input
+                class="sr-only"
+                id="import-file-input"
+                type="file"
+                accept="application/json,.json"
+              >
+            </div>
+            <p class="utility-copy" id="backup-status">
+              Export a JSON file now and keep it in Files or iCloud Drive.
+            </p>
+            <p class="backup-hint" id="backup-hint" hidden></p>
+          </article>
+        </div>
+      </section>
+
+      <section class="dashboard-section" aria-labelledby="dashboard-heading">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Dashboard</p>
+            <h2 id="dashboard-heading">Today</h2>
+          </div>
+          <p class="section-meta" id="today-meta"></p>
+        </div>
+        <div class="tile-grid">
+          <article class="tracker-tile">
+            <p class="tile-label">💧 Water</p>
+            <p class="tile-value" id="today-water-count">0</p>
+            <p class="tile-detail" id="today-water-last">No water yet</p>
+          </article>
+          <article class="tracker-tile">
+            <p class="tile-label">🚽 Pee</p>
+            <p class="tile-value" id="today-pee-count">0</p>
+            <p class="tile-detail" id="today-pee-last">No pee yet</p>
+          </article>
+          <article class="tracker-tile">
+            <p class="tile-label">💩 #2</p>
+            <p class="tile-value" id="today-number-two-count">0</p>
+            <p class="tile-detail" id="today-number-two-last">No #2 yet</p>
+          </article>
+          <article class="tracker-tile accent-tile">
+            <p class="tile-label">Pee gap</p>
+            <p class="tile-value tile-value-small" id="today-pee-gap">-</p>
+            <p class="tile-detail" id="today-pee-gap-detail">Log two pee events to see the gap</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="weekly-section" aria-labelledby="weekly-heading">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">7 day tracker</p>
+            <h2 id="weekly-heading">Last 7 days</h2>
+          </div>
+          <p class="section-meta">Tap a bar to open that day</p>
+        </div>
+        <div class="legend-row" aria-label="Legend">
+          <span class="legend-chip legend-water">💧 Water</span>
+          <span class="legend-chip legend-pee">🚽 Pee</span>
+          <span class="legend-chip legend-number-two">💩 #2</span>
+        </div>
+        <div class="histogram-shell">
+          <ul class="histogram-list" id="weekly-histogram" aria-live="polite"></ul>
+        </div>
+      </section>
+
+      <section class="archive-section" aria-labelledby="archive-heading">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">All days</p>
+            <h2 id="archive-heading">Browse every recorded day</h2>
+          </div>
+          <p class="section-meta" id="archive-count"></p>
+        </div>
+        <p class="archive-empty" id="archive-empty">
+          Recorded days will show up here.
+        </p>
+        <ul class="day-summary-list" id="day-summary-list" aria-live="polite"></ul>
+      </section>
+
+      <section class="selected-day-section" aria-labelledby="selected-day-heading">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Browse a day</p>
+            <h2 id="selected-day-heading">Selected day</h2>
+          </div>
+          <button class="text-button" id="jump-today-button" type="button">
+            Today
+          </button>
+        </div>
+
+        <div class="day-picker" aria-label="Choose a day">
+          <button class="day-nav-button" id="previous-day-button" type="button" aria-label="Previous day">
+            Previous
+          </button>
+          <label class="day-input-wrap">
+            <span class="sr-only">Choose date</span>
+            <input class="day-input" id="day-input" type="date">
+          </label>
+          <button class="day-nav-button" id="next-day-button" type="button" aria-label="Next day">
+            Next
+          </button>
+        </div>
+
+        <div class="tile-grid">
+          <article class="tracker-tile">
+            <p class="tile-label">💧 Water</p>
+            <p class="tile-value" id="selected-water-count">0</p>
+            <p class="tile-detail" id="selected-water-last">No water yet</p>
+          </article>
+          <article class="tracker-tile">
+            <p class="tile-label">🚽 Pee</p>
+            <p class="tile-value" id="selected-pee-count">0</p>
+            <p class="tile-detail" id="selected-pee-last">No pee yet</p>
+          </article>
+          <article class="tracker-tile">
+            <p class="tile-label">💩 #2</p>
+            <p class="tile-value" id="selected-number-two-count">0</p>
+            <p class="tile-detail" id="selected-number-two-last">No #2 yet</p>
+          </article>
+          <article class="tracker-tile accent-tile">
+            <p class="tile-label">Pee gap</p>
+            <p class="tile-value tile-value-small" id="selected-pee-gap">-</p>
+            <p class="tile-detail" id="selected-pee-gap-detail">Log two pee events to see the gap</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="history-section" aria-labelledby="history-heading">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Entries</p>
+            <h2 id="history-heading">Selected day</h2>
+          </div>
+          <button class="text-button" id="clear-day-button" type="button">
+            Clear day
+          </button>
+        </div>
+        <p class="history-empty" id="empty-state">
+          Nothing logged for this day yet.
+        </p>
+        <ul class="history-list" id="history-list" aria-live="polite"></ul>
+      </section>
+
+      <footer class="footer-note">
+        <p>Saved only on this device.</p>
+      </footer>
+    </main>
+
+    <div class="toast" id="toast" aria-live="polite" hidden>
+      <span id="toast-message"></span>
+      <button class="text-button toast-button" id="undo-button" type="button">
+        Undo
+      </button>
+    </div>
+
+    <div class="update-banner" id="update-banner" role="status" hidden>
+      <span class="update-banner-copy">A new version is ready.</span>
+      <button class="update-banner-button" id="update-button" type="button">
+        Reload
+      </button>
+    </div>
+
+    <template id="histogram-bar-template">
+      <li class="histogram-item">
+        <button class="histogram-button" type="button">
+          <span class="histogram-total"></span>
+          <span class="histogram-frame">
+            <span class="histogram-stack">
+              <span class="histogram-segment histogram-water"></span>
+              <span class="histogram-segment histogram-pee"></span>
+              <span class="histogram-segment histogram-number-two"></span>
+            </span>
+          </span>
+          <span class="histogram-label"></span>
+        </button>
+      </li>
+    </template>
+
+    <template id="day-summary-template">
+      <li>
+        <button class="day-summary-button" type="button">
+          <div class="day-summary-top">
+            <div>
+              <p class="day-summary-title"></p>
+              <p class="day-summary-subtitle"></p>
+            </div>
+            <p class="day-summary-total"></p>
+          </div>
+          <div class="day-summary-stats">
+            <span class="mini-stat mini-water"></span>
+            <span class="mini-stat mini-pee"></span>
+            <span class="mini-stat mini-number-two"></span>
+            <span class="mini-stat mini-gap"></span>
+          </div>
+        </button>
+      </li>
+    </template>
+
+    <template id="history-item-template">
+      <li class="history-item">
+        <div class="history-leading"></div>
+        <div class="history-copy">
+          <p class="history-title"></p>
+          <p class="history-meta"></p>
+        </div>
+        <button class="icon-button delete-button" type="button" aria-label="Delete entry">
+          Delete
+        </button>
+      </li>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>

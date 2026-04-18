@@ -1,0 +1,17 @@
+{
+  "name": "Flow Log",
+  "short_name": "Flow Log",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f4f8ff",
+  "theme_color": "#edf4ff",
+  "description": "A local-only water and pee tracker for your phone.",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
