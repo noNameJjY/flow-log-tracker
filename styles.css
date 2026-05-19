@@ -12,6 +12,8 @@
   --pee-deep: #d99b13;
   --number-two: #ff8f71;
   --number-two-deep: #e06248;
+  --meds: #c4b5fd;
+  --meds-deep: #7c5cf2;
   --mint: #73d0b8;
   --danger: #b54a54;
   --shadow: 0 18px 40px rgba(23, 48, 76, 0.08);
@@ -175,7 +177,13 @@ h2 {
 }
 
 .quick-actions {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (min-width: 560px) {
+  .quick-actions {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
 .tile-grid {
@@ -228,6 +236,10 @@ h2 {
 
 .number-two-button {
   background: linear-gradient(160deg, var(--number-two), var(--number-two-deep));
+}
+
+.meds-button {
+  background: linear-gradient(160deg, var(--meds), var(--meds-deep));
 }
 
 .action-emoji {
@@ -342,6 +354,12 @@ h2 {
   color: #b24630;
 }
 
+.legend-meds,
+.mini-meds {
+  background: rgba(124, 92, 242, 0.16);
+  color: var(--meds-deep);
+}
+
 .mini-gap {
   background: rgba(115, 208, 184, 0.16);
   color: #147c5c;
@@ -424,6 +442,10 @@ h2 {
 
 .histogram-number-two {
   background: linear-gradient(180deg, var(--number-two), var(--number-two-deep));
+}
+
+.histogram-meds {
+  background: linear-gradient(180deg, var(--meds), var(--meds-deep));
 }
 
 .archive-empty,
@@ -534,6 +556,10 @@ h2 {
 
 .history-leading.is-number-two {
   background: var(--number-two-deep);
+}
+
+.history-leading.is-meds {
+  background: var(--meds-deep);
 }
 
 .history-copy {

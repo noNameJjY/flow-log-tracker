@@ -18,6 +18,7 @@ const elements = {
   waterButton: document.querySelector("#water-button"),
   peeButton: document.querySelector("#pee-button"),
   numberTwoButton: document.querySelector("#number-two-button"),
+  medsButton: document.querySelector("#meds-button"),
   exportButton: document.querySelector("#export-button"),
   importButton: document.querySelector("#import-button"),
   importFileInput: document.querySelector("#import-file-input"),
@@ -32,6 +33,8 @@ const elements = {
   todayWaterLast: document.querySelector("#today-water-last"),
   todayPeeLast: document.querySelector("#today-pee-last"),
   todayNumberTwoLast: document.querySelector("#today-number-two-last"),
+  todayMedsCount: document.querySelector("#today-meds-count"),
+  todayMedsLast: document.querySelector("#today-meds-last"),
   todayPeeGap: document.querySelector("#today-pee-gap"),
   todayPeeGapDetail: document.querySelector("#today-pee-gap-detail"),
   histogramList: document.querySelector("#weekly-histogram"),
@@ -51,6 +54,8 @@ const elements = {
   selectedWaterLast: document.querySelector("#selected-water-last"),
   selectedPeeLast: document.querySelector("#selected-pee-last"),
   selectedNumberTwoLast: document.querySelector("#selected-number-two-last"),
+  selectedMedsCount: document.querySelector("#selected-meds-count"),
+  selectedMedsLast: document.querySelector("#selected-meds-last"),
   selectedPeeGap: document.querySelector("#selected-pee-gap"),
   selectedPeeGapDetail: document.querySelector("#selected-pee-gap-detail"),
   historyHeading: document.querySelector("#history-heading"),
@@ -66,6 +71,7 @@ const elements = {
 elements.waterButton.addEventListener("click", () => addEvent("water"));
 elements.peeButton.addEventListener("click", () => addEvent("pee"));
 elements.numberTwoButton.addEventListener("click", () => addEvent("number2"));
+elements.medsButton.addEventListener("click", () => addEvent("meds"));
 elements.exportButton.addEventListener("click", exportBackup);
 elements.importButton.addEventListener("click", promptImport);
 elements.importFileInput.addEventListener("change", importBackupFromFile);
@@ -446,6 +452,8 @@ function renderTodayDashboard(summary) {
     summary.lastByType.number2,
     "No #2 yet"
   );
+  elements.todayMedsCount.textContent = String(summary.counts.meds);
+  elements.todayMedsLast.textContent = formatLastEvent(summary.lastByType.meds, "No meds yet");
   elements.todayPeeGap.textContent = summary.peeGapMs ? formatCompactDuration(summary.peeGapMs) : "-";
   elements.todayPeeGapDetail.textContent = summary.peeGapMs
     ? "Between the latest two pee logs"
@@ -470,6 +478,7 @@ function renderWeeklyHistogram(daySummaries) {
     const water = item.querySelector(".histogram-water");
     const pee = item.querySelector(".histogram-pee");
     const numberTwo = item.querySelector(".histogram-number-two");
+    const meds = item.querySelector(".histogram-meds");
     const label = item.querySelector(".histogram-label");
 
     const totalCount = summary.totalCount;
@@ -485,6 +494,8 @@ function renderWeeklyHistogram(daySummaries) {
     water.hidden = summary.counts.water === 0;
     pee.hidden = summary.counts.pee === 0;
     numberTwo.hidden = summary.counts.number2 === 0;
+    meds.style.height = segmentPercent(summary.counts.meds, totalCount);
+    meds.hidden = summary.counts.meds === 0;
 
     if (summary.dateKey === state.selectedDate) {
       button.classList.add("is-selected");
@@ -492,7 +503,7 @@ function renderWeeklyHistogram(daySummaries) {
 
     button.setAttribute(
       "aria-label",
-      `${formatLongDate(summary.dateKey)}: ${summary.counts.water} water, ${summary.counts.pee} pee, ${summary.counts.number2} number two`
+      `${formatLongDate(summary.dateKey)}: ${summary.counts.water} water, ${summary.counts.pee} pee, ${summary.counts.number2} number two, ${summary.counts.meds} meds`
     );
     button.addEventListener("click", () => {
       state.selectedDate = summary.dateKey;
@@ -518,6 +529,7 @@ function renderArchive(daySummaries) {
     const water = item.querySelector(".mini-water");
     const pee = item.querySelector(".mini-pee");
     const numberTwo = item.querySelector(".mini-number-two");
+    const meds = item.querySelector(".mini-meds");
     const gap = item.querySelector(".mini-gap");
 
     title.textContent = formatArchiveTitle(summary.dateKey);
@@ -528,6 +540,7 @@ function renderArchive(daySummaries) {
     water.textContent = `💧 ${summary.counts.water}`;
     pee.textContent = `🚽 ${summary.counts.pee}`;
     numberTwo.textContent = `💩 ${summary.counts.number2}`;
+    meds.textContent = `💊 ${summary.counts.meds}`;
     gap.textContent = summary.peeGapMs
       ? `gap ${formatCompactDuration(summary.peeGapMs)}`
       : "gap -";
@@ -555,6 +568,8 @@ function renderSelectedDay(summary) {
     summary.lastByType.number2,
     "No #2 yet"
   );
+  elements.selectedMedsCount.textContent = String(summary.counts.meds);
+  elements.selectedMedsLast.textContent = formatLastEvent(summary.lastByType.meds, "No meds yet");
   elements.selectedPeeGap.textContent = summary.peeGapMs
     ? formatCompactDuration(summary.peeGapMs)
     : "-";
@@ -640,11 +655,13 @@ function createEmptySummary(dateKey) {
       water: 0,
       pee: 0,
       number2: 0,
+      meds: 0,
     },
     lastByType: {
       water: null,
       pee: null,
       number2: null,
+      meds: null,
     },
     lastEvent: null,
     peeGapMs: null,
@@ -676,7 +693,7 @@ function isValidEvent(entry) {
   return (
     entry &&
     typeof entry.id === "string" &&
-    (entry.type === "water" || entry.type === "pee" || entry.type === "number2") &&
+    (entry.type === "water" || entry.type === "pee" || entry.type === "number2" || entry.type === "meds") &&
     typeof entry.timestamp === "number" &&
     Number.isFinite(entry.timestamp)
   );
@@ -807,6 +824,10 @@ function labelForHistory(type) {
     return "🚽 Pee";
   }
 
+  if (type === "meds") {
+    return "💊 Meds";
+  }
+
   return "💩 #2";
 }
 
@@ -817,6 +838,10 @@ function labelForToast(type) {
 
   if (type === "pee") {
     return "Pee";
+  }
+
+  if (type === "meds") {
+    return "Meds";
   }
 
   return "#2";
@@ -833,6 +858,10 @@ function leadingClassForType(type) {
 
   if (type === "pee") {
     return "is-pee";
+  }
+
+  if (type === "meds") {
+    return "is-meds";
   }
 
   return "is-number-two";
