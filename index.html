@@ -57,44 +57,6 @@
         </div>
       </section>
 
-      <section class="utility-section" aria-labelledby="utility-heading">
-        <div class="section-heading">
-          <div>
-            <p class="section-kicker">Phone setup</p>
-            <h2 id="utility-heading">Install and back up</h2>
-          </div>
-        </div>
-        <div class="utility-grid">
-          <article class="utility-card">
-            <p class="utility-title">Install on iPhone</p>
-            <p class="utility-copy">
-              Open this in Safari, tap Share, then choose Add to Home Screen.
-            </p>
-          </article>
-          <article class="utility-card">
-            <p class="utility-title">Backup your logs</p>
-            <div class="backup-actions">
-              <button class="pill-button" id="export-button" type="button">
-                Export backup
-              </button>
-              <button class="pill-button" id="import-button" type="button">
-                Import backup
-              </button>
-              <input
-                class="sr-only"
-                id="import-file-input"
-                type="file"
-                accept="application/json,.json"
-              >
-            </div>
-            <p class="utility-copy" id="backup-status">
-              Export a JSON file now and keep it in Files or iCloud Drive.
-            </p>
-            <p class="backup-hint" id="backup-hint" hidden></p>
-          </article>
-        </div>
-      </section>
-
       <section class="dashboard-section" aria-labelledby="dashboard-heading">
         <div class="section-heading">
           <div>
@@ -104,6 +66,11 @@
           <p class="section-meta" id="today-meta"></p>
         </div>
         <div class="tile-grid">
+          <article class="tracker-tile accent-tile">
+            <p class="tile-label">Pee gap</p>
+            <p class="tile-value tile-value-small" id="today-pee-gap">-</p>
+            <p class="tile-detail" id="today-pee-gap-detail">Log two pee events to see the gap</p>
+          </article>
           <article class="tracker-tile">
             <p class="tile-label">💧 Water</p>
             <p class="tile-value" id="today-water-count">0</p>
@@ -123,11 +90,6 @@
             <p class="tile-label">💊 Meds</p>
             <p class="tile-value" id="today-meds-count">0</p>
             <p class="tile-detail" id="today-meds-last">No meds yet</p>
-          </article>
-          <article class="tracker-tile accent-tile">
-            <p class="tile-label">Pee gap</p>
-            <p class="tile-value tile-value-small" id="today-pee-gap">-</p>
-            <p class="tile-detail" id="today-pee-gap-detail">Log two pee events to see the gap</p>
           </article>
         </div>
       </section>
@@ -190,6 +152,11 @@
         </div>
 
         <div class="tile-grid">
+          <article class="tracker-tile accent-tile">
+            <p class="tile-label">Pee gap</p>
+            <p class="tile-value tile-value-small" id="selected-pee-gap">-</p>
+            <p class="tile-detail" id="selected-pee-gap-detail">Log two pee events to see the gap</p>
+          </article>
           <article class="tracker-tile">
             <p class="tile-label">💧 Water</p>
             <p class="tile-value" id="selected-water-count">0</p>
@@ -210,11 +177,6 @@
             <p class="tile-value" id="selected-meds-count">0</p>
             <p class="tile-detail" id="selected-meds-last">No meds yet</p>
           </article>
-          <article class="tracker-tile accent-tile">
-            <p class="tile-label">Pee gap</p>
-            <p class="tile-value tile-value-small" id="selected-pee-gap">-</p>
-            <p class="tile-detail" id="selected-pee-gap-detail">Log two pee events to see the gap</p>
-          </article>
         </div>
       </section>
 
@@ -232,6 +194,44 @@
           Nothing logged for this day yet.
         </p>
         <ul class="history-list" id="history-list" aria-live="polite"></ul>
+      </section>
+
+      <section class="utility-section" aria-labelledby="utility-heading">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Phone setup</p>
+            <h2 id="utility-heading">Install and back up</h2>
+          </div>
+        </div>
+        <div class="utility-grid">
+          <article class="utility-card">
+            <p class="utility-title">Install on iPhone</p>
+            <p class="utility-copy">
+              Open this in Safari, tap Share, then choose Add to Home Screen.
+            </p>
+          </article>
+          <article class="utility-card">
+            <p class="utility-title">Backup your logs</p>
+            <div class="backup-actions">
+              <button class="pill-button" id="export-button" type="button">
+                Export backup
+              </button>
+              <button class="pill-button" id="import-button" type="button">
+                Import backup
+              </button>
+              <input
+                class="sr-only"
+                id="import-file-input"
+                type="file"
+                accept="application/json,.json"
+              >
+            </div>
+            <p class="utility-copy" id="backup-status">
+              Export a JSON file now and keep it in Files or iCloud Drive.
+            </p>
+            <p class="backup-hint" id="backup-hint" hidden></p>
+          </article>
+        </div>
       </section>
 
       <footer class="footer-note">

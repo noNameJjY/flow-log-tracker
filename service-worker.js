@@ -1,4 +1,4 @@
-const CACHE_NAME = "flow-log-cache-v8";
+const CACHE_NAME = "flow-log-cache-v10";
 const ASSETS = [
   "./",
   "./index.html",
